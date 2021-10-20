@@ -8,6 +8,21 @@
   <title>Document</title>
   <meta name='asg_verification' content='LZfPgFYVVudYWvyhDV7yz2ti'>
   <link href="https://vjs.zencdn.net/7.15.4/video-js.css" rel="stylesheet" />
+  <style>
+    .overlay {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      background: #eee;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-self: center;
+    }
+
+  </style>
 </head>
 
 <body>
@@ -16,8 +31,10 @@
     <source src="./videos/videoplayback.mp4" type="video/mp4">
     Your browser does not support th
   </video>
-  <video id="myvideo" style="position: fixed; top:0; right:0">
-  </video>
+  <div class="overlay">
+    <video id="myvideo">
+    </video>
+    <div>
 
   <script src="https://vjs.zencdn.net/7.15.4/video.min.js"></script>
   <!-- Ads Managed by AdSpyglass.com -->
