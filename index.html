@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <link href="https://vjs.zencdn.net/7.15.4/video-js.css" rel="stylesheet" />
   <meta name='asg_verification' content='LZfPgFYVVudYWvyhDV7yz2ti'>
   <style>
     .overlay {
@@ -40,6 +41,8 @@
     #myvideo {
       display: block;
       margin: 0 auto;
+      width: 500px;
+      height: 500px;
     }
   </style>
 </head>
@@ -47,7 +50,7 @@
 <body>
   <h1>Video Ads</h1>
   <button onclick="createAds();">Show Video Ads</button>
-  <div id="modal" class="overlay" >
+  <div id="modal" class="overlay">
     <div class="contain">
       <video id="myvideo">
       </video>
@@ -62,19 +65,16 @@
       document.getElementById('modal').classList.add('show');
       window.__initAsg({
         autoplay: true,
-        spotUrl: "//a.shukriya90.com/api/spots/350760",
+        spotUrl: "//a.shukriya90.com/api/spots/350810",
         attachTo: '#myvideo',
-        skipoffset: 30000,
-        afterCallback: function () {
+        skipoffset: 15000,
+        verbosity: -1,
+        onAdFinish: function () {
           document.getElementById('modal').classList.remove('show');
-          // var element = document.getElementById("myvideo");
-          // let parentNode = element.parentNode;
-          // parentNode.removeChild(element);
-          // let newVideo = document.createElement('video');
-          // newVideo.setAttribute("id", "myvideo");
-          // parentNode.appendChild(newVideo);
+          console.log("after finish");
+          window.location.reload();
         },
-        subid1: '11807',
+        subid1: '11810',
         width: {
           desktop: 500,
         },
@@ -82,6 +82,7 @@
           desktop: 400,
         }
       });
+
     }
   </script>
 
