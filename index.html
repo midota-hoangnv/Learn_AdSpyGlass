@@ -26,6 +26,10 @@
     window.__initAsg({
       spotUrl: "//a.shukriya90.com/api/spots/350554",
       attachTo: '#myvideo',
+      autoplay: true,
+      onAdFinish: function() {
+        console.log("onaddfinish nha");
+      },
       width: {
         mobile: 150,
         desktop: 250
