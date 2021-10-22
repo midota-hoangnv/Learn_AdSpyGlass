@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <link href="https://vjs.zencdn.net/7.15.4/video-js.css" rel="stylesheet" />
+  <!-- <link href="https://vjs.zencdn.net/7.15.4/video-js.css" rel="stylesheet" /> -->
   <meta name='asg_verification' content='LZfPgFYVVudYWvyhDV7yz2ti'>
   <style>
     .overlay {
@@ -57,33 +57,61 @@
     </div>
   </div>
 
-  <script src="https://vjs.zencdn.net/7.15.4/video.min.js"></script>
+  <!-- <script src="https://vjs.zencdn.net/7.15.4/video.min.js"></script> -->
   <!-- Ads Managed by AdSpyglass.com -->
-  <script type="text/javascript" src="//cdn.tapioni.com/vast-im.js"></script>
+  <script id="adspyglass" type="text/javascript" src="//cdn.tapioni.com/vast-im.js"></script>
+
+
   <script>
+
+
+    // function loadJs(src) {
+    //   let removeEle = document.querySelector('#adspyglass')
+    //   removeEle && document.body.removeChild(removeEle);
+    //   var script = document.createElement('script');
+    //   script.src = src + "?&time=" + Date.now();
+    //   script.setAttribute('type', 'text/javascript');
+    //   console.log("script", script);
+    //   document.body.appendChild(script);
+    // }
+    // let spots = ["350953", "350949", "350944", "350942", "350941", "350554",  "350810"];
+    let spots = ["350810"];
     function createAds() {
       document.getElementById('modal').classList.add('show');
+      console.log("RUN")
+      let spot = spots.pop();
+      console.log(spot);
+      spots.unshift(spot);
       window.__initAsg({
         autoplay: true,
-        spotUrl: "//a.shukriya90.com/api/spots/350810",
+        spotUrl: "//a.shukriya90.com/api/spots/" + spot,
         attachTo: '#myvideo',
         skipoffset: 15000,
         verbosity: -1,
-        onAdFinish: function () {
-          document.getElementById('modal').classList.remove('show');
-          console.log("after finish");
-          window.location.reload();
+        onAdReady: function() {
+          document.getElementById('modal').classList.add('show');
         },
-        subid1: '11810',
+        onAdFinish: function () {
+          
+          fetch('https://fakestoreapi.com/products/1')
+            .then(res=>res.json())
+            .then(json=> {
+              console.log("You add 1 point");
+            })
+          console.log("after finish");
+          document.getElementById('modal').classList.remove('show');
+        },
+        // subid1: '11810',
         width: {
-          desktop: 500,
+          desktop: 800,
         },
         height: {
-          desktop: 400,
+          desktop: 800,
         }
       });
 
     }
+
   </script>
 
 </body>
