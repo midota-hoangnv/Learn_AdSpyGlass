@@ -44,6 +44,19 @@
       width: 500px;
       height: 500px;
     }
+
+    .btn-close-modal {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 50px;
+      height: 50px;
+      border: 1px solid black;
+      color: red;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   </style>
 </head>
 
@@ -51,6 +64,7 @@
   <h1>Video Ads</h1>
   <button onclick="createAds();">Show Video Ads</button>
   <div id="modal" class="overlay">
+    <div class="btn-close-modal" onclick="closeModal();">X</div>
     <div class="contain">
       <video id="myvideo">
       </video>
@@ -63,33 +77,19 @@
 
 
   <script>
-
-
-    // function loadJs(src) {
-    //   let removeEle = document.querySelector('#adspyglass')
-    //   removeEle && document.body.removeChild(removeEle);
-    //   var script = document.createElement('script');
-    //   script.src = src + "?&time=" + Date.now();
-    //   script.setAttribute('type', 'text/javascript');
-    //   console.log("script", script);
-    //   document.body.appendChild(script);
-    // }
-    // let spots = ["350953", "350949", "350944", "350942", "350941", "350554",  "350810"];
-    let spots = ["350810"];
+    function closeModal() { 
+      document.getElementById('modal').classList.remove('show');
+    }
     function createAds() {
       document.getElementById('modal').classList.add('show');
-      console.log("RUN")
-      let spot = spots.pop();
-      console.log(spot);
-      spots.unshift(spot);
       window.__initAsg({
         autoplay: true,
-        spotUrl: "//a.shukriya90.com/api/spots/" + spot,
+        spotUrl: "//a.shukriya90.com/api/spots/" + 351021,
         attachTo: '#myvideo',
         skipoffset: 15000,
         verbosity: -1,
         onAdReady: function() {
-          document.getElementById('modal').classList.add('show');
+
         },
         onAdFinish: function () {
           
