@@ -6,7 +6,6 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <!-- <link href="https://vjs.zencdn.net/7.15.4/video-js.css" rel="stylesheet" /> -->
   <meta name='asg_verification' content='LZfPgFYVVudYWvyhDV7yz2ti'>
   <style>
     .overlay {
@@ -66,54 +65,64 @@
   <div id="modal" class="overlay">
     <div class="btn-close-modal" onclick="closeModal();">X</div>
     <div class="contain">
-      <video id="myvideo">
-      </video>
+      <div id="myvideo">
+      </div>
     </div>
   </div>
 
-  <!-- <script src="https://vjs.zencdn.net/7.15.4/video.min.js"></script> -->
-  <!-- Ads Managed by AdSpyglass.com -->
-  <script id="adspyglass" type="text/javascript" src="//cdn.tapioni.com/vast-im.js"></script>
-
+  <script type="text/javascript" src="//cdn.tapioni.com/vast-im.js"></script>
 
   <script>
-    function closeModal() { 
+    function closeModal() {
       document.getElementById('modal').classList.remove('show');
     }
     function createAds() {
       document.getElementById('modal').classList.add('show');
-      window.__initAsg({
-        autoplay: true,
-        spotUrl: "//a.shukriya90.com/api/spots/" + 351021,
-        attachTo: '#myvideo',
-        skipoffset: 15000,
-        verbosity: -1,
-        onAdReady: function() {
 
-        },
+      window.__ASG_VAST.addSpot({
+        spotId: 	351044,
+        attachTo: '#myvideo',
         onAdFinish: function () {
-          
+
           fetch('https://fakestoreapi.com/products/1')
-            .then(res=>res.json())
-            .then(json=> {
+            .then(res => res.json())
+            .then(json => {
               console.log("You add 1 point");
             })
           console.log("after finish");
           document.getElementById('modal').classList.remove('show');
         },
-        // subid1: '11810',
-        width: {
-          desktop: 800,
-        },
-        height: {
-          desktop: 800,
-        }
       });
+      // window.__initAsg({
+      //   autoplay: true,
+      //   spotUrl: "//a.shukriya90.com/api/spots/" + 351021,
+      //   attachTo: '#myvideo',
+      //   skipoffset: 15000,
+      //   verbosity: -1,
+      //   onAdReady: function() {
+
+      //   },
+      //   onAdFinish: function () {
+
+      //     fetch('https://fakestoreapi.com/products/1')
+      //       .then(res=>res.json())
+      //       .then(json=> {
+      //         console.log("You add 1 point");
+      //       })
+      //     console.log("after finish");
+      //     document.getElementById('modal').classList.remove('show');
+      //   },
+      //   // subid1: '11810',
+      //   width: {
+      //     desktop: 800,
+      //   },
+      //   height: {
+      //     desktop: 800,
+      //   }
+      // });
 
     }
-
   </script>
-
 </body>
 
 </html>
