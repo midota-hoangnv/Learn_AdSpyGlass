@@ -57,61 +57,177 @@
       align-items: center;
       justify-content: center;
     }
+
+    #mainContainer {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      height: 360px;
+      background-color: #dcc;
+    }
+
+    #content,
+    #adContainer {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      right: 0px;
+      left: 0px;
+      height: 100%;
+    }
+
+    #contentElement {
+      width: 640px;
+      height: 360px;
+      overflow: hidden;
+    }
+
+    #playButton {
+      margin-top: 10px;
+      vertical-align: top;
+      width: 350px;
+      height: 60px;
+      padding: 0;
+      font-size: 22px;
+      color: white;
+      text-align: center;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+      background: #2c3e50;
+      border: 0;
+      border-bottom: 2px solid #22303f;
+      cursor: pointer;
+      -webkit-box-shadow: inset 0 -2px #22303f;
+      box-shadow: inset 0 -2px #22303f;
+    }
   </style>
 </head>
 
 <body>
   <h1>Video Ads</h1>
-  <button onclick="createAds();">Show Video Ads</button>
   <div id="modal" class="overlay">
     <div class="btn-close-modal" onclick="closeModal();">X</div>
     <div class="contain">
-      <video id="myvideo">
-      </video>
+      <div id="mainContainer">
+        <div id="content">
+          <p>Ad container...</p>
+          <!-- video -->
+        </div>
+        <div id="adContainer"></div>
+      </div>
     </div>
   </div>
 
-  <!-- <script src="https://vjs.zencdn.net/7.15.4/video.min.js"></script> -->
-  <!-- Ads Managed by AdSpyglass.com -->
-  <script id="adspyglass" type="text/javascript" src="//cdn.tapioni.com/vast-im.js"></script>
-
+  <button id="playButton">Request ad</button>
+  <script type="text/javascript" src="//imasdk.googleapis.com/js/sdkloader/ima3.js"></script>
 
   <script>
-    function closeModal() { 
+    function closeModal() {
       document.getElementById('modal').classList.remove('show');
+      isLoadingAds = false;
+      if (adsManager) {
+        adsManager.destroy();
+      }
     }
-    function createAds() {
+    function openModal() {
       document.getElementById('modal').classList.add('show');
-      window.__initAsg({
-        autoplay: true,
-        spotUrl: "//a.shukriya90.com/api/spots/" + 351021,
-        attachTo: '#myvideo',
-        skipoffset: 15000,
-        verbosity: -1,
-        onAdReady: function() {
+    }
+    let adsManager;
+    let videoElement = document.getElementById('adContainer');
+    var adDisplayContainer = new google.ima.AdDisplayContainer(videoElement);
+    let isLoadingAds = false;
+    // Must be done as the result of a user action on mobile
+    adDisplayContainer.initialize();
 
-        },
-        onAdFinish: function () {
-          
-          fetch('https://fakestoreapi.com/products/1')
-            .then(res=>res.json())
-            .then(json=> {
-              console.log("You add 1 point");
-            })
-          console.log("after finish");
-          document.getElementById('modal').classList.remove('show');
-        },
-        // subid1: '11810',
-        width: {
-          desktop: 800,
-        },
-        height: {
-          desktop: 800,
-        }
-      });
+    // Re-use this AdsLoader instance for the entire lifecycle of your page.
+    var adsLoader = new google.ima.AdsLoader(adDisplayContainer);
 
+    // Add event listeners
+    adsLoader.addEventListener(
+      google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED,
+      onAdsManagerLoaded,
+      false);
+    adsLoader.addEventListener(
+      google.ima.AdErrorEvent.Type.AD_ERROR,
+      onAdError,
+      false);
+
+    function onAdError(adErrorEvent) {
+      // Handle the error logging and destroy the AdsManager
+      console.log(adErrorEvent.getError());
+      alert("Ads is not run. Please try again");
+      closeModal();
+      isLoadingAds = false;
+      if (adsManager) {
+        adsManager.destroy();
+      }
     }
 
+    // Request video ads.
+    var adsRequest = new google.ima.AdsRequest();
+    // JS VPAID
+    adsRequest.adTagUrl = '//a.shukriya90.com/api/spots/351044';
+    // adsRequest.adTagUrl = '//a.shukriya90.com/api/spots/351016';
+
+
+    var playButton = document.getElementById('playButton');
+    playButton.addEventListener('click', requestAds);
+
+    // Change size of the container when user scale size
+    window.addEventListener('resize', function (event) {
+      console.log("window resized");
+      if (adsManager) {
+        var width = videoElement.clientWidth;
+        var height = videoElement.clientHeight;
+        adsManager.resize(width, height, google.ima.ViewMode.NORMAL);
+        if (adsManager) {
+          adsManager.resume();
+        }
+      }
+    });
+
+    // Call to the Ad server to get data
+    function requestAds() {
+      if (isLoadingAds === true) return;
+      openModal();
+      adsLoader.requestAds(adsRequest);
+    }
+
+    // Function handle when vast data pass to the element
+    function onAdsManagerLoaded(adsManagerLoadedEvent) {
+      // Get the ads manager.
+      adsManager = adsManagerLoadedEvent.getAdsManager(document.createElement('video'));
+
+      // Add event catch error when load
+      adsManager.addEventListener(
+        google.ima.AdErrorEvent.Type.AD_ERROR,
+        onAdError);
+      // Add event when ads complete
+      adsManager.addEventListener(
+        google.ima.AdEvent.Type.COMPLETE,
+        onAdComplete);
+
+      try {
+        var width = videoElement.clientWidth;
+        var height = videoElement.clientHeight;
+        // Initialize the ads manager. Ad rules playlist will start at this time.
+        adsManager.init(width, height, google.ima.ViewMode.NORMAL);
+        // Call start to show ads. Single video and overlay ads will
+        // start at this time; this call will be ignored for ad rules, as ad rules
+        // ads start when the adsManager is initialized.
+        adsManager.start();
+      } catch (adError) {
+        // An error may be thrown if there was a problem with the VAST response.
+      }
+    }
+
+    // Function handle when the advertise finished (skipped or ended);
+    function onAdComplete() {
+      console.log("complete");
+      alert("You got one point");
+      isLoadingAds = false;
+      closeModal();
+    }
   </script>
 
 </body>
