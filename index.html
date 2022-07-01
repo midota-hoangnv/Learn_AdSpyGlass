@@ -6,8 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <meta name='asg_verification' content='LZfPgFYVVudYWvyhDV7yz2ti'>
   <link href="https://vjs.zencdn.net/7.15.4/video-js.css" rel="stylesheet" />
+  <meta name='asg_verification' content='LZfPgFYVVudYWvyhDV7yz2ti'>
   <style>
     .overlay {
       position: fixed;
@@ -20,45 +20,72 @@
       display: flex;
       align-items: center;
       justify-self: center;
-
+      display: none;
 
     }
 
     .contain {
-      width: 300px;
-      height: 300px;
+      width: 100%;
+      height: 500px;
+      max-width: 800px;
       margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-self: center;
+    }
+
+    .show {
+      display: flex;
+    }
+
+    #myvideo {
+      display: block;
+      margin: 0 auto;
+      width: 500px;
+      height: 500px;
     }
   </style>
 </head>
 
 <body>
   <h1>Video Ads</h1>
-  <div class="overlay">
-    <div class="contain"> 
+  <button onclick="createAds();">Show Video Ads</button>
+  <div id="modal" class="overlay">
+    <div class="contain">
       <video id="myvideo">
       </video>
     </div>
-    <div>
+  </div>
 
   <script src="https://vjs.zencdn.net/7.15.4/video.min.js"></script>
   <!-- Ads Managed by AdSpyglass.com -->
   <script type="text/javascript" src="//cdn.tapioni.com/vast-im.js"></script>
   <script>
-    window.__initAsg({
-      spotUrl: "//a.shukriya90.com/api/spots/350554",
-      attachTo: '#myvideo',
-      autoplay: true,
-      afterCallback: function() {
-        console.log("onaddfinish nha");
-      },
-      subid1: '11805',
-      width: {
-        mobile: 150,
-        desktop: 250
-      }
-    });
+    function createAds() {
+      document.getElementById('modal').classList.add('show');
+      window.__initAsg({
+        autoplay: true,
+        spotUrl: "//a.shukriya90.com/api/spots/350810",
+        attachTo: '#myvideo',
+        skipoffset: 15000,
+        verbosity: -1,
+        onAdFinish: function () {
+          document.getElementById('modal').classList.remove('show');
+          console.log("after finish");
+          window.location.reload();
+        },
+        subid1: '11810',
+        width: {
+          desktop: 500,
+        },
+        height: {
+          desktop: 400,
+        }
+      });
+
+    }
   </script>
+
 </body>
 
 </html>
